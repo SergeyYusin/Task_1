@@ -19,28 +19,21 @@ DATA = {
     # можете добавить свои рецепты ;)
 }
 
-context = {
-    'recipe': {
-        'ингредиент1': 1,
-        'ингредиент2': 2,
+
+def calculate_view(requests, dish_get):
+    servings = int(requests.GET.get('servings', 1))
+    send_dish = {}
+    for dish, ingredients in DATA.items():
+        if dish_get == dish:
+            for ing, count in ingredients.items():
+                send_dish[ing] = count * servings
+
+    context = {
+        'recipe': send_dish
     }
-}
 
+    return render(requests, 'calculator/index.html', context)
 
-def recipe(request):
-    return render(request, 'calculator/index.html', {'recipe': DATA})
-
-
-def omlet(request):
-    return render(request, 'calculator/index.html', {'recipe': DATA['omlet']})
-
-
-def pasta(request):
-    return render(request, 'calculator/index.html', {'recipe': DATA['pasta']})
-
-
-def buter(request):
-    return render(request, 'calculator/index.html', {'recipe': DATA['buter']})
 # Напишите ваш обработчик. Используйте DATA как источник данных
 # Результат - render(request, 'calculator/index.html', context)
 # В качестве контекста должен быть передан словарь с рецептом:
